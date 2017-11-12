@@ -1,4 +1,4 @@
-package claire.example.com.androidannotations;
+package claire.example.com.androidannotations.image;
 
 import android.app.Application;
 import android.content.Context;
