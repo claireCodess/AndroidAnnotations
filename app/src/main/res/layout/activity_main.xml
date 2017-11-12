@@ -2,12 +2,12 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
     tools:context="claire.example.com.androidannotations.MainActivity">
 
-    <TextView
+    <!-- <TextView
         android:id="@+id/mot_a_trouver"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -20,7 +20,7 @@
         android:layout_marginTop="8dp"
         android:text="TextView"
         android:layout_marginLeft="8dp"
-        android:layout_marginStart="8dp" />
+        android:layout_marginStart="8dp" /> -->
 
     <GridView
         android:id="@+id/grid_view"
@@ -32,5 +32,21 @@
         android:verticalSpacing="5dp"
         tools:layout_editor_absoluteX="8dp"
         tools:layout_editor_absoluteY="8dp" />
+
+    <EditText
+        android:id="@+id/reponse_utilisateur"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:ems="10"
+        android:hint="Entrez votre réponse ici..."
+        android:inputType="textPersonName" />
+
+    <Button
+        android:id="@+id/valider_reponse"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:text="Valider" />
+
 
 </LinearLayout>

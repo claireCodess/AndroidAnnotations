@@ -6,8 +6,11 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.JsonReader;
+import android.view.View;
+import android.widget.Button;
 import android.widget.GridView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -20,9 +23,11 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     public static List<String> cheminsFichiersImages;
+    public static String motATrouver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         try {
@@ -32,6 +37,7 @@ public class MainActivity extends AppCompatActivity {
         } catch(MalformedURLException e) {
             e.printStackTrace();
         }
+
     }
 
     class DownloadImagesTask extends AsyncTask<URL, Integer, List> {
@@ -83,7 +89,6 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(JsonReader jsonReader) {
-            String motATrouver = null;
             GridView gridView;
 
             try {
@@ -121,8 +126,8 @@ public class MainActivity extends AppCompatActivity {
                 }
                 jsonReader.endObject();
 
-                TextView textView = (TextView) findViewById(R.id.mot_a_trouver);
-                textView.setText("Mot à trouver : " + motATrouver);
+                /*TextView textView = (TextView) findViewById(R.id.mot_a_trouver);
+                textView.setText("Mot à trouver : " + motATrouver);*/
 
                 List<URL> urlsImagesARecuperer = new ArrayList<>();
                 for(String chemin : cheminsFichiersImages) {
@@ -132,6 +137,25 @@ public class MainActivity extends AppCompatActivity {
                 gridView = (GridView)findViewById(R.id.grid_view);
                 gridView.setAdapter(new ImageArrayAdapter(MainActivity.this, R.layout.item_grid_image, cheminsFichiersImages));
                 //new DownloadImagesTask().execute(urlsImagesARecuperer.toArray(new URL[urlsImagesARecuperer.size()]));
+
+                Button valider = (Button) findViewById(R.id.valider_reponse);
+                valider.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(v.getId() == R.id.valider_reponse) {
+                            TextView reponseUtilisateur = (TextView) findViewById(R.id.reponse_utilisateur);
+
+                            if(reponseUtilisateur.getText().toString().equals(motATrouver)) {
+                                // Ici, il faut penser à l'astuce d'utiliser "MainActivity.this", sinon, le "this"
+                                // représente cette instance d'OnClickListener !
+                                Toast.makeText(MainActivity.this, R.string.motTrouve, Toast.LENGTH_SHORT).show();
+                            } else {
+                                // Même remarque ici
+                                Toast.makeText(MainActivity.this, R.string.motNonTrouve, Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    }
+                });
             } catch(IOException e) {
                 e.printStackTrace();
             }
