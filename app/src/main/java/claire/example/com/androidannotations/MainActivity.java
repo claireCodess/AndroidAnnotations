@@ -9,6 +9,7 @@ import android.util.JsonReader;
 import android.view.View;
 import android.widget.Button;
 import android.widget.GridView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,6 +24,7 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
 
     public static List<String> cheminsFichiersImages;
+    public static int nombreImagesChargees;
     public static String motATrouver;
 
     @Override
@@ -70,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
             InputStream file = null;
             JsonReader jsonReader = null;
 
-            // There should only be one URL
+            // Il devrait y avoir une seule URL !
             if(urls.length == 1) {
                 try {
                     file = urls[0].openStream();
@@ -89,7 +91,9 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(JsonReader jsonReader) {
+            LinearLayout gameLayout, loadingLayout;
             GridView gridView;
+            nombreImagesChargees = 0;
 
             try {
                 jsonReader.beginObject();
@@ -112,8 +116,9 @@ public class MainActivity extends AppCompatActivity {
                                     jsonReader.beginArray();
                                     while (jsonReader.hasNext()) {
                                         String cheminImg = jsonReader.nextString();
-                                        if(i == 0)
+                                        if(i == 0) {
                                             cheminsFichiersImages.add(cheminImg);
+                                        }
                                     }
                                     jsonReader.endArray();
                                 }
@@ -135,7 +140,9 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 gridView = (GridView)findViewById(R.id.grid_view);
-                gridView.setAdapter(new ImageArrayAdapter(MainActivity.this, R.layout.item_grid_image, cheminsFichiersImages));
+                gameLayout = (LinearLayout) findViewById(R.id.game_layout);
+                loadingLayout = (LinearLayout) findViewById(R.id.loading_layout);
+                gridView.setAdapter(new ImageArrayAdapter(MainActivity.this, R.layout.item_grid_image, cheminsFichiersImages, gameLayout, loadingLayout));
                 //new DownloadImagesTask().execute(urlsImagesARecuperer.toArray(new URL[urlsImagesARecuperer.size()]));
 
                 Button valider = (Button) findViewById(R.id.valider_reponse);
