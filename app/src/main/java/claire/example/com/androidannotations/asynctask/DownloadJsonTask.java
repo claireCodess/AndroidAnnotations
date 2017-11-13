@@ -2,12 +2,9 @@ package claire.example.com.androidannotations.asynctask;
 
 import android.os.AsyncTask;
 import android.util.JsonReader;
-import android.view.View;
-import android.widget.Button;
 import android.widget.GridView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.ListView;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -18,7 +15,7 @@ import java.util.List;
 
 import claire.example.com.androidannotations.R;
 import claire.example.com.androidannotations.activities.MainActivity;
-import claire.example.com.androidannotations.image.ImageArrayAdapter;
+import claire.example.com.androidannotations.adapters.ButtonArrayAdapter;
 
 /**
  * Created by Claire on 12/11/2017.
@@ -58,7 +55,12 @@ public class DownloadJsonTask extends AsyncTask<URL, Integer, JsonReader> {
     protected void onPostExecute(JsonReader jsonReader) {
         LinearLayout gameLayout, loadingLayout;
         GridView gridView;
-        activity.setNombreImagesChargees(0);
+        int nbNiveaux = 0;
+        List<String> nomsNiveaux;
+
+        activity.setCheminsFichiersToutesLesImages(new ArrayList<List<String>>());
+        activity.setTousLesMotsATrouver(new ArrayList<String>());
+
 
         try {
             jsonReader.beginObject();
@@ -66,68 +68,44 @@ public class DownloadJsonTask extends AsyncTask<URL, Integer, JsonReader> {
                 String propertyName = jsonReader.nextName();
                 if (propertyName.equals("rebus")) {
                     jsonReader.beginArray();
-                    int i = 0;
                     while(jsonReader.hasNext()) {
                         jsonReader.beginObject();
                         while (jsonReader.hasNext()) {
                             String rebusPropertyName = jsonReader.nextName();
                             if (rebusPropertyName.equals("mot")) {
                                 String mot = jsonReader.nextString();
-                                if(i == 0)
-                                    activity.setMotATrouver(mot);
+                                activity.getTousLesMotsATrouver().add(mot);
+                                /*if(nbNiveaux == 0)
+                                    activity.setMotATrouver(mot);*/
                             } else if (rebusPropertyName.equals("images")) {
-                                if(i == 0)
-                                    activity.setCheminsFichiersImages(new ArrayList<String>());
+                                //if(nbNiveaux == 0)
+                                List<String> cheminsFichiersImgMotCourant = new ArrayList<>();
                                 jsonReader.beginArray();
                                 while (jsonReader.hasNext()) {
                                     String cheminImg = jsonReader.nextString();
-                                    if(i == 0) {
-                                        activity.getCheminsFichiersImages().add(cheminImg);
-                                    }
+                                    cheminsFichiersImgMotCourant.add(cheminImg);
                                 }
+                                activity.getCheminsFichiersToutesLesImages().add(cheminsFichiersImgMotCourant);
                                 jsonReader.endArray();
                             }
                         }
                         jsonReader.endObject();
-                        i++;
+                        nbNiveaux++;
                     }
                     jsonReader.endArray();
                 }
             }
             jsonReader.endObject();
 
-                /*TextView textView = (TextView) findViewById(R.id.mot_a_trouver);
-                textView.setText("Mot à trouver : " + motATrouver);*/
-
-            List<URL> urlsImagesARecuperer = new ArrayList<>();
-            for(String chemin : activity.getCheminsFichiersImages()) {
-                urlsImagesARecuperer.add(new URL(activity.getResources().getString(R.string.url_root) + chemin));
+            nomsNiveaux = new ArrayList<>();
+            for(int numNiveau = 1; numNiveau <= nbNiveaux; numNiveau++) {
+                nomsNiveaux.add(activity.getResources().getString(R.string.niveau) + " " + numNiveau);
             }
 
-            gridView = (GridView) activity.findViewById(R.id.grid_view);
-            gameLayout = (LinearLayout) activity.findViewById(R.id.game_layout);
-            loadingLayout = (LinearLayout) activity.findViewById(R.id.loading_layout);
-            gridView.setAdapter(new ImageArrayAdapter(activity, R.layout.item_grid_image, activity.getCheminsFichiersImages()));
-            //new DownloadImagesTask().execute(urlsImagesARecuperer.toArray(new URL[urlsImagesARecuperer.size()]));
+            ListView listView = (ListView) activity.findViewById(R.id.noms_niveaux);
+            listView.setAdapter(new ButtonArrayAdapter<String>(activity,
+                    R.layout.item_list_level, nomsNiveaux));
 
-            Button valider = (Button) activity.findViewById(R.id.valider_reponse);
-            valider.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if(v.getId() == R.id.valider_reponse) {
-                        TextView reponseUtilisateur = (TextView) activity.findViewById(R.id.reponse_utilisateur);
-
-                        if(reponseUtilisateur.getText().toString().equals(activity.getMotATrouver())) {
-                            // Ici, il faut penser à l'astuce d'utiliser "MainActivity.this", sinon, le "this"
-                            // représente cette instance d'OnClickListener !
-                            Toast.makeText(activity, R.string.motTrouve, Toast.LENGTH_SHORT).show();
-                        } else {
-                            // Même remarque ici
-                            Toast.makeText(activity, R.string.motNonTrouve, Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                }
-            });
         } catch(IOException e) {
             e.printStackTrace();
         }

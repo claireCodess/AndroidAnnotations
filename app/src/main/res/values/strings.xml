@@ -1,6 +1,10 @@
 <resources>
     <string name="app_name">Android Annotations</string>
+    <string name="titre_rebus">Jeu du rébus</string>
     <string name="url_root">http://claire.tsc-hunter.com/tp-android/</string>
     <string name="motTrouve">Bravo, vous avez trouvé le mot !</string>
     <string name="motNonTrouve">Dommage, réessayez !</string>
+    <string name="chargement">Chargement...</string>
+    <string name="niveau">Niveau</string>
+    <string name="identifiant_niveau">btnNiveau</string>
 </resources>

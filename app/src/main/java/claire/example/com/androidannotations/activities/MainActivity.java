@@ -1,10 +1,13 @@
 package claire.example.com.androidannotations.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 
 import claire.example.com.androidannotations.R;
@@ -12,32 +15,31 @@ import claire.example.com.androidannotations.asynctask.DownloadJsonTask;
 
 public class MainActivity extends AppCompatActivity {
 
-    private List<String> cheminsFichiersImages;
-    private int nombreImagesChargees;
-    private String motATrouver;
+    private List<List<String>> cheminsFichiersToutesLesImages;
+    private List<String> tousLesMotsATrouver;
 
-    public List<String> getCheminsFichiersImages() {
-        return cheminsFichiersImages;
+    public static final String CHEMINS_FICHIERS_IMAGES = "claire.example.com.androidannotations.chemins";
+    public static final String MOT_A_TROUVER = "claire.example.com.androidannotations.mot";
+    public static final String NUM_NIVEAU_COURANT = "claire.example.com.androidannotations.niveau";
+
+    public List<List<String>> getCheminsFichiersToutesLesImages() {
+        return cheminsFichiersToutesLesImages;
     }
 
-    public void setCheminsFichiersImages(List<String> cheminsFichiersImages) {
-        this.cheminsFichiersImages = cheminsFichiersImages;
+    public void setCheminsFichiersToutesLesImages(List<List<String>> cheminsFichiersToutesLesImages) {
+        this.cheminsFichiersToutesLesImages = cheminsFichiersToutesLesImages;
     }
 
-    public int getNombreImagesChargees() {
-        return nombreImagesChargees;
+    public List<String> getTousLesMotsATrouver() {
+        return tousLesMotsATrouver;
     }
 
-    public void setNombreImagesChargees(int nombreImagesChargees) {
-        this.nombreImagesChargees = nombreImagesChargees;
+    public void setTousLesMotsATrouver(List<String> tousLesMotsATrouver) {
+        this.tousLesMotsATrouver = tousLesMotsATrouver;
     }
 
-    public String getMotATrouver() {
-        return motATrouver;
-    }
-
-    public void setMotATrouver(String motATrouver) {
-        this.motATrouver = motATrouver;
+    public View.OnClickListener getOnClickListener() {
+        return onClickListener;
     }
 
     @Override
@@ -55,5 +57,24 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    // Global OnClickListener for all views
+    final private View.OnClickListener onClickListener = new View.OnClickListener() {
+
+        @Override
+        public void onClick(final View v) {
+            String niveau = (String)v.getTag();
+            niveau = niveau.replace(getResources().getString(R.string.identifiant_niveau), "");
+            int indexNiveau = Integer.parseInt(niveau);
+            ArrayList<String> cheminsFichiersImgNiveauCourant = (ArrayList) cheminsFichiersToutesLesImages.get(indexNiveau);
+            String motATrouver = tousLesMotsATrouver.get(indexNiveau);
+
+            Intent intent = new Intent(MainActivity.this, GameActivity.class);
+            intent.putExtra(NUM_NIVEAU_COURANT, indexNiveau);
+            intent.putExtra(MOT_A_TROUVER, motATrouver);
+            intent.putStringArrayListExtra(CHEMINS_FICHIERS_IMAGES, cheminsFichiersImgNiveauCourant);
+            startActivity(intent);
+        }
+
+    };
 
 }
