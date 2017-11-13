@@ -17,10 +17,12 @@ public class MainActivity extends AppCompatActivity {
 
     private List<List<String>> cheminsFichiersToutesLesImages;
     private List<String> tousLesMotsATrouver;
+    private int nbNiveaux;
 
     public static final String CHEMINS_FICHIERS_IMAGES = "claire.example.com.androidannotations.chemins";
     public static final String MOT_A_TROUVER = "claire.example.com.androidannotations.mot";
-    public static final String NUM_NIVEAU_COURANT = "claire.example.com.androidannotations.niveau";
+    public static final String NUM_NIVEAU_DEMARRAGE = "claire.example.com.androidannotations.niveau_start";
+    private static final int GAME_ACTIVITY_INTENT_CODE = 1;
 
     public List<List<String>> getCheminsFichiersToutesLesImages() {
         return cheminsFichiersToutesLesImages;
@@ -36,6 +38,14 @@ public class MainActivity extends AppCompatActivity {
 
     public void setTousLesMotsATrouver(List<String> tousLesMotsATrouver) {
         this.tousLesMotsATrouver = tousLesMotsATrouver;
+    }
+
+    public int getNbNiveaux() {
+        return nbNiveaux;
+    }
+
+    public void setNbNiveaux(int nbNiveaux) {
+        this.nbNiveaux = nbNiveaux;
     }
 
     public View.OnClickListener getOnClickListener() {
@@ -65,16 +75,39 @@ public class MainActivity extends AppCompatActivity {
             String niveau = (String)v.getTag();
             niveau = niveau.replace(getResources().getString(R.string.identifiant_niveau), "");
             int indexNiveau = Integer.parseInt(niveau);
-            ArrayList<String> cheminsFichiersImgNiveauCourant = (ArrayList) cheminsFichiersToutesLesImages.get(indexNiveau);
-            String motATrouver = tousLesMotsATrouver.get(indexNiveau);
-
-            Intent intent = new Intent(MainActivity.this, GameActivity.class);
-            intent.putExtra(NUM_NIVEAU_COURANT, indexNiveau);
-            intent.putExtra(MOT_A_TROUVER, motATrouver);
-            intent.putStringArrayListExtra(CHEMINS_FICHIERS_IMAGES, cheminsFichiersImgNiveauCourant);
-            startActivity(intent);
+            demarrerNiveau(indexNiveau);
         }
 
     };
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode == GAME_ACTIVITY_INTENT_CODE) {
+            if(resultCode == RESULT_OK) {
+                int indexNiveauSuivant = data.getIntExtra(GameActivity.NUM_NIVEAU_SUIVANT, 0);
+                if(indexNiveauSuivant < nbNiveaux) {
+                    demarrerNiveau(indexNiveauSuivant);
+                }
+            }
+            // Si resultCode == RESULT_CANCELED, alors l'utilisateur a appuyé
+            // sur la flèche de retour, donc on ne fait rien.
+        }
+    }
+
+    /**
+     * Démarrer le niveau à l'index correspondant dans le fichier JSON.
+     * @param indexNiveau L'index du niveau à démarrer.
+     */
+    public void demarrerNiveau(int indexNiveau) {
+        ArrayList<String> cheminsFichiersImgNiveauCourant = (ArrayList) cheminsFichiersToutesLesImages.get(indexNiveau);
+        String motATrouver = tousLesMotsATrouver.get(indexNiveau);
+
+        Intent intent = new Intent(MainActivity.this, GameActivity.class);
+        intent.putExtra(NUM_NIVEAU_DEMARRAGE, indexNiveau);
+        intent.putExtra(MOT_A_TROUVER, motATrouver);
+        intent.putStringArrayListExtra(CHEMINS_FICHIERS_IMAGES, cheminsFichiersImgNiveauCourant);
+        //startActivity(intent);
+        startActivityForResult(intent, GAME_ACTIVITY_INTENT_CODE);
+    }
 
 }

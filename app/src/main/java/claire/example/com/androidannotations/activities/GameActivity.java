@@ -20,6 +20,8 @@ public class GameActivity extends AppCompatActivity {
     private String motATrouver;
     private List<String> cheminsFichiersImages;
 
+    public static final String NUM_NIVEAU_SUIVANT = "claire.example.com.androidannotations.niveau";
+
     public String getMotATrouver() {
         return motATrouver;
     }
@@ -44,7 +46,7 @@ public class GameActivity extends AppCompatActivity {
         GridView gridView;
 
         Intent intent = getIntent();
-        numNiveauCourant = intent.getIntExtra(MainActivity.NUM_NIVEAU_COURANT, 0);
+        numNiveauCourant = intent.getIntExtra(MainActivity.NUM_NIVEAU_DEMARRAGE, 0);
         motATrouver = intent.getStringExtra(MainActivity.MOT_A_TROUVER);
         cheminsFichiersImages = intent.getStringArrayListExtra(MainActivity.CHEMINS_FICHIERS_IMAGES);
 
@@ -62,6 +64,12 @@ public class GameActivity extends AppCompatActivity {
                         // Ici, il faut penser à l'astuce d'utiliser "GameActivity.this", sinon, le "this"
                         // représente cette instance d'OnClickListener !
                         Toast.makeText(GameActivity.this, R.string.motTrouve, Toast.LENGTH_SHORT).show();
+
+                        // On passe au niveau suivant s'il existe, sinon on retourne à l'écran d'accueil
+                        Intent intentRetour = new Intent();
+                        intentRetour.putExtra(NUM_NIVEAU_SUIVANT, ++numNiveauCourant);
+                        setResult(RESULT_OK, intentRetour);
+                        finish();
                     } else {
                         // Même remarque ici
                         Toast.makeText(GameActivity.this, R.string.motNonTrouve, Toast.LENGTH_SHORT).show();

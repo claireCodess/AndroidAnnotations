@@ -1,0 +1,3 @@
+N.B. Les solutions d'implémentation dans le cadre du jeu présenté par ce TP ne sont pas forcément les meilleures/les plus optimales. Le but de ce TP est de mettre en avant les annotations les plus courantes de la bibliothèque d'AndroidAnnotations.
+
+Ces annotations ressemblent à ce qu'on peut trouver dans les annotations REST [mettre lien pour doc ici] ou encore les annotations Spring [mettre lien pour doc ici].

@@ -97,6 +97,7 @@ public class DownloadJsonTask extends AsyncTask<URL, Integer, JsonReader> {
             }
             jsonReader.endObject();
 
+            activity.setNbNiveaux(nbNiveaux);
             nomsNiveaux = new ArrayList<>();
             for(int numNiveau = 1; numNiveau <= nbNiveaux; numNiveau++) {
                 nomsNiveaux.add(activity.getResources().getString(R.string.niveau) + " " + numNiveau);
