@@ -7,7 +7,6 @@ import android.widget.Button;
 import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
@@ -21,6 +20,7 @@ import java.util.List;
 
 import claire.example.com.androidannotations.R;
 import claire.example.com.androidannotations.adapters.ImageArrayAdapter;
+import claire.example.com.androidannotations.toast.AffichageToast;
 
 @EActivity(R.layout.activity_game)
 public class GameActivity extends AppCompatActivity {
@@ -146,7 +146,7 @@ public class GameActivity extends AppCompatActivity {
     @Click(R.id.valider_reponse)
     public void validerClicked() {
         if (reponseUtilisateur.getText().toString().equals(motATrouver)) {
-            Toast.makeText(this, /*R.string.*/motTrouve, Toast.LENGTH_SHORT).show();
+            AffichageToast.afficherToast(this, motTrouve);
 
             // On passe au niveau suivant s'il existe, sinon on retourne à l'écran d'accueil
             Intent intentRetour = MainActivity_.intent(this).get();
@@ -154,7 +154,7 @@ public class GameActivity extends AppCompatActivity {
             setResult(RESULT_OK, intentRetour);
             finish();
         } else {
-            Toast.makeText(this, /*R.string.*/motNonTrouve, Toast.LENGTH_SHORT).show();
+            AffichageToast.afficherToast(this, motNonTrouve);
         }
     }
 }

@@ -13,6 +13,7 @@ import org.androidannotations.annotations.OnActivityResult;
 import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.ViewById;
 import org.androidannotations.annotations.res.StringRes;
+import org.androidannotations.api.BackgroundExecutor;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -24,8 +25,10 @@ import java.util.List;
 
 import claire.example.com.androidannotations.R;
 import claire.example.com.androidannotations.adapters.ButtonArrayAdapter;
+import claire.example.com.androidannotations.toast.AffichageToast;
 
 import static claire.example.com.androidannotations.activities.GameActivity.CHEMINS_FICHIERS_IMAGES;
+import static claire.example.com.androidannotations.toast.AffichageToast.afficherToast;
 
 @EActivity(R.layout.activity_main)
 public class MainActivity extends AppCompatActivity {
@@ -106,72 +109,86 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    @Background
+    @Background(id="cancellable_task")
     public void telechargerFichierJson(URL urlFichierJson) {
-        InputStream file = null;
+        InputStream file;
         JsonReader jsonReader;
 
         tousLesMotsATrouver = new ArrayList<>();
         cheminsFichiersToutesLesImages = new ArrayList<>();
         nombreDeNiveaux = 0;
         List<String> nomsNiveaux = new ArrayList<>();
+        boolean accesServeur = false;
 
         try {
-            file = urlFichierJson.openStream();
-        } catch(IOException e) {
-            e.printStackTrace();
+            String command = "ping -c 1 claire.tsc-hunter.com";
+            accesServeur = Runtime.getRuntime().exec (command).waitFor() == 0;
+        } catch(IOException | InterruptedException e) {
+            afficherMessageErreurConnexion();
+            BackgroundExecutor.cancelAll("cancellable_task", true);
         }
 
-        if(file != null) {
-            jsonReader = new JsonReader(new InputStreamReader(file));
+        if(accesServeur) {
             try {
-                jsonReader.beginObject();
-                while(jsonReader.hasNext()) {
-                    String propertyName = jsonReader.nextName();
-                    if (propertyName.equals("rebus")) {
-                        jsonReader.beginArray();
-                        while(jsonReader.hasNext()) {
-                            jsonReader.beginObject();
+                file = urlFichierJson.openStream();
+                if (file != null) {
+                    jsonReader = new JsonReader(new InputStreamReader(file));
+                    jsonReader.beginObject();
+                    while (jsonReader.hasNext()) {
+                        String propertyName = jsonReader.nextName();
+                        if (propertyName.equals("rebus")) {
+                            jsonReader.beginArray();
                             while (jsonReader.hasNext()) {
-                                String rebusPropertyName = jsonReader.nextName();
-                                if (rebusPropertyName.equals("mot")) {
-                                    String mot = jsonReader.nextString();
-                                    tousLesMotsATrouver.add(mot);
-                                } else if (rebusPropertyName.equals("images")) {
-                                    List<String> cheminsFichiersImgMotCourant = new ArrayList<>();
-                                    jsonReader.beginArray();
-                                    while (jsonReader.hasNext()) {
-                                        String cheminImg = jsonReader.nextString();
-                                        cheminsFichiersImgMotCourant.add(cheminImg);
+                                jsonReader.beginObject();
+                                while (jsonReader.hasNext()) {
+                                    String rebusPropertyName = jsonReader.nextName();
+                                    if (rebusPropertyName.equals("mot")) {
+                                        String mot = jsonReader.nextString();
+                                        tousLesMotsATrouver.add(mot);
+                                    } else if (rebusPropertyName.equals("images")) {
+                                        List<String> cheminsFichiersImgMotCourant = new ArrayList<>();
+                                        jsonReader.beginArray();
+                                        while (jsonReader.hasNext()) {
+                                            String cheminImg = jsonReader.nextString();
+                                            cheminsFichiersImgMotCourant.add(cheminImg);
+                                        }
+                                        cheminsFichiersToutesLesImages.add(cheminsFichiersImgMotCourant);
+                                        jsonReader.endArray();
                                     }
-                                    cheminsFichiersToutesLesImages.add(cheminsFichiersImgMotCourant);
-                                    jsonReader.endArray();
                                 }
+                                jsonReader.endObject();
+                                nombreDeNiveaux++;
                             }
-                            jsonReader.endObject();
-                            nombreDeNiveaux++;
+                            jsonReader.endArray();
                         }
-                        jsonReader.endArray();
+                    }
+                    jsonReader.endObject();
+
+                    for (int numNiveau = 1; numNiveau <= nombreDeNiveaux; numNiveau++) {
+                        nomsNiveaux.add(constanteNiveau + " " + numNiveau);
                     }
                 }
-                jsonReader.endObject();
-
-                for(int numNiveau = 1; numNiveau <= nombreDeNiveaux; numNiveau++) {
-                    nomsNiveaux.add(constanteNiveau + " " + numNiveau);
-                }
-
-            } catch(IOException e) {
-                e.printStackTrace();
+                mettreAJourMenuPrincipal(nomsNiveaux);
+            } catch (IOException e) {
+                afficherMessageErreurConnexion();
+                BackgroundExecutor.cancelAll("cancellable_task", true);
             }
+        } else {
+            afficherMessageErreurConnexion();
+            BackgroundExecutor.cancelAll("cancellable_task", true);
         }
 
-        mettreAJourMenuPrincipal(nomsNiveaux);
     }
 
     @UiThread
     public void mettreAJourMenuPrincipal(List<String> nomsNiveaux) {
         listView.setAdapter(new ButtonArrayAdapter<>(this,
                 R.layout.item_list_level, nomsNiveaux));
+    }
+
+    @UiThread
+    public void afficherMessageErreurConnexion() {
+        afficherToast(this, AffichageToast.ERREUR_CONNEXION);
     }
 
     // Global OnClickListener for all views
