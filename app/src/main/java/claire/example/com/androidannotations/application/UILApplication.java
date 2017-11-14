@@ -1,4 +1,4 @@
-package claire.example.com.androidannotations.image;
+package claire.example.com.androidannotations.application;
 
 import android.app.Application;
 import android.content.Context;
@@ -8,10 +8,13 @@ import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.ImageLoaderConfiguration;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 
+import org.androidannotations.annotations.EApplication;
+
 /**
  * Created by Claire on 09/11/2017.
  */
 
+@EApplication
 public class UILApplication extends Application {
     public void onCreate() {
         super.onCreate();

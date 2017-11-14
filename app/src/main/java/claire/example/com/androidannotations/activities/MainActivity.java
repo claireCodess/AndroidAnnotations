@@ -4,6 +4,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.widget.ListView;
+
+import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.ViewById;
+import org.androidannotations.annotations.res.StringRes;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -11,9 +16,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 import claire.example.com.androidannotations.R;
-import claire.example.com.androidannotations.asynctask.DownloadJsonTask;
+import claire.example.com.androidannotations.asynctasks.DownloadJsonTask;
 
+@EActivity(R.layout.activity_main)
 public class MainActivity extends AppCompatActivity {
+
+    // Injection de vue
+    @ViewById(R.id.noms_niveaux)
+    public ListView listView;
+
+    // Ressources (Strings ici)
+
+    @StringRes(R.string.identifiant_niveau)
+    public String idNiveau;
+
+    @StringRes(R.string.niveau)
+    public String constanteNiveau;
 
     private List<List<String>> cheminsFichiersToutesLesImages;
     private List<String> tousLesMotsATrouver;
@@ -60,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
         try {
             String urlFichierJsonStr = getResources().getString(R.string.url_root) + "rebus.json";
             URL urlFichierJson = new URL(urlFichierJsonStr);
-            new DownloadJsonTask(this).execute(urlFichierJson);
+            new DownloadJsonTask((MainActivity_)this).execute(urlFichierJson);
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
@@ -73,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onClick(final View v) {
             String niveau = (String)v.getTag();
-            niveau = niveau.replace(getResources().getString(R.string.identifiant_niveau), "");
+            niveau = niveau.replace(/*getResources().getString(R.string.identifiant_niveau)*/idNiveau, "");
             int indexNiveau = Integer.parseInt(niveau);
             demarrerNiveau(indexNiveau);
         }
@@ -84,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode == GAME_ACTIVITY_INTENT_CODE) {
             if(resultCode == RESULT_OK) {
-                int indexNiveauSuivant = data.getIntExtra(GameActivity.NUM_NIVEAU_SUIVANT, 0);
+                int indexNiveauSuivant = data.getIntExtra(GameActivity_.NUM_NIVEAU_SUIVANT, 0);
                 if(indexNiveauSuivant < nbNiveaux) {
                     demarrerNiveau(indexNiveauSuivant);
                 }
@@ -102,7 +120,7 @@ public class MainActivity extends AppCompatActivity {
         ArrayList<String> cheminsFichiersImgNiveauCourant = (ArrayList) cheminsFichiersToutesLesImages.get(indexNiveau);
         String motATrouver = tousLesMotsATrouver.get(indexNiveau);
 
-        Intent intent = new Intent(MainActivity.this, GameActivity.class);
+        Intent intent = new Intent(this, GameActivity_.class);
         intent.putExtra(NUM_NIVEAU_DEMARRAGE, indexNiveau);
         intent.putExtra(MOT_A_TROUVER, motATrouver);
         intent.putStringArrayListExtra(CHEMINS_FICHIERS_IMAGES, cheminsFichiersImgNiveauCourant);

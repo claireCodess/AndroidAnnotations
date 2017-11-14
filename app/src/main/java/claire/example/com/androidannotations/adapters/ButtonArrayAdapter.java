@@ -10,7 +10,7 @@ import android.widget.Button;
 import java.util.List;
 
 import claire.example.com.androidannotations.R;
-import claire.example.com.androidannotations.activities.MainActivity;
+import claire.example.com.androidannotations.activities.MainActivity_;
 
 /**
  * Created by Claire on 13/11/2017.
@@ -19,14 +19,14 @@ import claire.example.com.androidannotations.activities.MainActivity;
 public class ButtonArrayAdapter<T> extends ArrayAdapter<T> {
 
     private LayoutInflater layoutInflater;
-    private MainActivity activity;
+    private MainActivity_ activity;
     private int resource;
     private List<T> objects;
 
     public ButtonArrayAdapter(Context context, int resource, List<T> objects) {
         super(context, resource, objects);
         layoutInflater = LayoutInflater.from(context);
-        this.activity = (MainActivity) context;
+        this.activity = (MainActivity_) context;
         this.resource = resource;
         this.objects = objects;
     }
@@ -45,7 +45,7 @@ public class ButtonArrayAdapter<T> extends ArrayAdapter<T> {
         }
 
         button.setText((String)objects.get(position));
-        button.setTag(activity.getResources().getString(R.string.identifiant_niveau) + position);
+        button.setTag(activity.idNiveau/*getResources().getString(R.string.identifiant_niveau)*/ + position);
         button.setOnClickListener(activity.getOnClickListener());
 
         return view;

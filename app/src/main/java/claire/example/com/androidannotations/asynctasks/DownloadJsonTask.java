@@ -1,10 +1,9 @@
-package claire.example.com.androidannotations.asynctask;
+package claire.example.com.androidannotations.asynctasks;
 
 import android.os.AsyncTask;
 import android.util.JsonReader;
 import android.widget.GridView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -14,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import claire.example.com.androidannotations.R;
-import claire.example.com.androidannotations.activities.MainActivity;
+import claire.example.com.androidannotations.activities.MainActivity_;
 import claire.example.com.androidannotations.adapters.ButtonArrayAdapter;
 
 /**
@@ -23,9 +22,9 @@ import claire.example.com.androidannotations.adapters.ButtonArrayAdapter;
 
 public class DownloadJsonTask extends AsyncTask<URL, Integer, JsonReader> {
 
-    private MainActivity activity;
+    private MainActivity_ activity;
 
-    public DownloadJsonTask(MainActivity activity) {
+    public DownloadJsonTask(MainActivity_ activity) {
         this.activity = activity;
     }
 
@@ -100,11 +99,11 @@ public class DownloadJsonTask extends AsyncTask<URL, Integer, JsonReader> {
             activity.setNbNiveaux(nbNiveaux);
             nomsNiveaux = new ArrayList<>();
             for(int numNiveau = 1; numNiveau <= nbNiveaux; numNiveau++) {
-                nomsNiveaux.add(activity.getResources().getString(R.string.niveau) + " " + numNiveau);
+                nomsNiveaux.add(activity.constanteNiveau/*getResources().getString(R.string.niveau)*/ + " " + numNiveau);
             }
 
-            ListView listView = (ListView) activity.findViewById(R.id.noms_niveaux);
-            listView.setAdapter(new ButtonArrayAdapter<String>(activity,
+            //ListView listView = (ListView) activity.findViewById(R.id.noms_niveaux);
+            activity.listView.setAdapter(new ButtonArrayAdapter<String>(activity,
                     R.layout.item_list_level, nomsNiveaux));
 
         } catch(IOException e) {
