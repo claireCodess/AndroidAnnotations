@@ -3,14 +3,16 @@ package claire.example.com.androidannotations.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.androidannotations.annotations.AfterViews;
+import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.Extra;
 import org.androidannotations.annotations.ViewById;
 import org.androidannotations.annotations.ViewsById;
 import org.androidannotations.annotations.res.StringRes;
@@ -22,6 +24,13 @@ import claire.example.com.androidannotations.adapters.ImageArrayAdapter;
 
 @EActivity(R.layout.activity_game)
 public class GameActivity extends AppCompatActivity {
+
+    // Constantes
+
+    public static final String CHEMINS_FICHIERS_IMAGES = "claire.example.com.androidannotations.chemins";
+    public static final String MOT_A_TROUVER = "claire.example.com.androidannotations.mot";
+    public static final String NUM_NIVEAU_COURANT = "claire.example.com.androidannotations.niveau_start";
+
 
     // Injections de vues
 
@@ -37,7 +46,8 @@ public class GameActivity extends AppCompatActivity {
     @ViewsById({R.id.loading_layout, R.id.game_layout})
     public List<LinearLayout> linearLayouts;
 
-    // Ressources (Strings ici)
+
+    // Ressources (String ici)
 
     @StringRes
     public String motTrouve;
@@ -48,11 +58,20 @@ public class GameActivity extends AppCompatActivity {
     @StringRes(R.string.url_root)
     public String urlRoot;
 
-    private int numNiveauCourant;
-    private String motATrouver;
-    private List<String> cheminsFichiersImages;
 
-    public static final String NUM_NIVEAU_SUIVANT = "claire.example.com.androidannotations.niveau";
+    // Les extras passées en paramètre à l'Intent qui a démarré cette Activity
+
+    @Extra(NUM_NIVEAU_COURANT)
+    public Integer numNiveauCourant;
+
+    @Extra(MOT_A_TROUVER)
+    public String motATrouver;
+
+    //@Extra(CHEMINS_FICHIERS_IMAGES)
+    public List<String> cheminsFichiersImages;
+
+
+    // Les getters/setters
 
     public String getMotATrouver() {
         return motATrouver;
@@ -70,6 +89,7 @@ public class GameActivity extends AppCompatActivity {
         this.cheminsFichiersImages = cheminsFichiersImages;
     }
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,16 +97,16 @@ public class GameActivity extends AppCompatActivity {
 
         //GridView gridView;
 
-        Intent intent = getIntent();
+        /*Intent intent = getIntent();
         numNiveauCourant = intent.getIntExtra(MainActivity_.NUM_NIVEAU_DEMARRAGE, 0);
         motATrouver = intent.getStringExtra(MainActivity_.MOT_A_TROUVER);
-        cheminsFichiersImages = intent.getStringArrayListExtra(MainActivity_.CHEMINS_FICHIERS_IMAGES);
+        cheminsFichiersImages = intent.getStringArrayListExtra(MainActivity_.CHEMINS_FICHIERS_IMAGES);*/
 
         //gridView = (GridView) findViewById(R.id.grid_view);
-        gridView.setAdapter(new ImageArrayAdapter(this, R.layout.item_grid_image, cheminsFichiersImages));
+        //gridView.setAdapter(new ImageArrayAdapter(this, R.layout.item_grid_image, cheminsFichiersImages));
 
         //Button valider = (Button) findViewById(R.id.valider_reponse);
-        valider.setOnClickListener(new View.OnClickListener() {
+        /*valider.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (v.getId() == R.id.valider_reponse) {
@@ -95,20 +115,46 @@ public class GameActivity extends AppCompatActivity {
                     if (reponseUtilisateur.getText().toString().equals(motATrouver)) {
                         // Ici, il faut penser à l'astuce d'utiliser "GameActivity.this", sinon, le "this"
                         // représente cette instance d'OnClickListener !
-                        Toast.makeText(GameActivity.this, /*R.string.*/motTrouve, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(GameActivity.this, R.string.motTrouve, Toast.LENGTH_SHORT).show();
 
                         // On passe au niveau suivant s'il existe, sinon on retourne à l'écran d'accueil
-                        Intent intentRetour = new Intent();
-                        intentRetour.putExtra(NUM_NIVEAU_SUIVANT, ++numNiveauCourant);
+                        /*Intent intentRetour = new Intent();
+                        intentRetour.putExtra(MainActivity.NUM_NIVEAU_SUIVANT, ++numNiveauCourant);
+                        Intent intentRetour = GameActivity_.intent(this)
+                                .indexNiveauSuivant(++numNiveauCourant);
+
                         setResult(RESULT_OK, intentRetour);
+
                         finish();
                     } else {
                         // Même remarque ici
-                        Toast.makeText(GameActivity.this, /*R.string.*/motNonTrouve, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(GameActivity.this, R.string.motNonTrouve, Toast.LENGTH_SHORT).show();
                     }
                 }
             }
-        });
+        });*/
 
+    }
+
+    @AfterViews
+    public void chargerImages() {
+        Intent intent = getIntent();
+        cheminsFichiersImages = intent.getStringArrayListExtra(CHEMINS_FICHIERS_IMAGES);
+        gridView.setAdapter(new ImageArrayAdapter(this, R.layout.item_grid_image, cheminsFichiersImages));
+    }
+
+    @Click(R.id.valider_reponse)
+    public void validerClicked() {
+        if (reponseUtilisateur.getText().toString().equals(motATrouver)) {
+            Toast.makeText(this, /*R.string.*/motTrouve, Toast.LENGTH_SHORT).show();
+
+            // On passe au niveau suivant s'il existe, sinon on retourne à l'écran d'accueil
+            Intent intentRetour = MainActivity_.intent(this).get();
+            intentRetour.putExtra(MainActivity_.NUM_NIVEAU_SUIVANT, ++numNiveauCourant);
+            setResult(RESULT_OK, intentRetour);
+            finish();
+        } else {
+            Toast.makeText(this, /*R.string.*/motNonTrouve, Toast.LENGTH_SHORT).show();
+        }
     }
 }
