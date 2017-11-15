@@ -2,23 +2,19 @@ package claire.example.com.androidannotations.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.UiThread;
 import android.support.v7.app.AppCompatActivity;
 import android.util.JsonReader;
 import android.view.View;
 import android.widget.ListView;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
 import claire.example.com.androidannotations.R;
-import claire.example.com.androidannotations.adapters.ButtonArrayAdapter;
-import claire.example.com.androidannotations.toast.AffichageToast;
+import claire.example.com.androidannotations.asynctasks.DownloadJsonTask;
 
 // Etape 1 : à décommenter
 /* import org.androidannotations.annotations.Background;
@@ -88,15 +84,18 @@ public class MainActivity extends AppCompatActivity {
         try {
             String urlFichierJsonStr = getResources().getString(R.string.url_root) + "rebus.json";
             URL urlFichierJson = new URL(urlFichierJsonStr);
-            //new DownloadJsonTask((MainActivity_)this).execute(urlFichierJson);
-            telechargerFichierJson(urlFichierJson);
+
+            // Etape 7 : remplacer la ligne ci-dessous par la ligne commentée
+            new DownloadJsonTask(this).execute(urlFichierJson);
+            // telechargerFichierJson(urlFichierJson);
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
 
     }
 
-    @Background(id="cancellable_task")
+    // Etape 7 : méthode à décommenter
+    /* @Background(id="cancellable_task")
     public void telechargerFichierJson(URL urlFichierJson) {
         InputStream file;
         JsonReader jsonReader;
@@ -134,23 +133,26 @@ public class MainActivity extends AppCompatActivity {
             BackgroundExecutor.cancelAll("cancellable_task", true);
         }
 
-    }
+    } */
 
-    @UiThread
+    // Etape 7 : méthode à décommenter
+    /* @UiThread
     public void mettreAJourMenuPrincipal(List<String> nomsNiveaux) {
         listView.setAdapter(new ButtonArrayAdapter<>(this,
                 R.layout.item_list_level, nomsNiveaux));
-    }
+    } */
 
-    @UiThread
+    // Etape 7 : méthode à décommenter
+    /* @UiThread
     public void afficherMessageErreurConnexion() {
         AffichageToast.afficherToast(this, AffichageToast.ERREUR_CONNEXION);
-    }
+    } */
 
-    @UiThread
+    // Etape 7 : méthode à décommenter
+    /* @UiThread
     public void afficherMessageErreurJson() {
         AffichageToast.afficherToast(this, AffichageToast.ERREUR_LECTURE_JSON);
-    }
+    } */
 
     // Etape 5 : méthode à commenter
     @Override
