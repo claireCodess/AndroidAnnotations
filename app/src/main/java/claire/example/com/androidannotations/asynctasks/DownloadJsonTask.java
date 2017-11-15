@@ -16,8 +16,6 @@ import claire.example.com.androidannotations.activities.MainActivity;
 import claire.example.com.androidannotations.adapters.ButtonArrayAdapter;
 import claire.example.com.androidannotations.toast.AffichageToast;
 
-import static claire.example.com.androidannotations.activities.MainActivity.COMMAND;
-
 /**
  * Created by Claire on 12/11/2017.
  */
@@ -26,14 +24,16 @@ import static claire.example.com.androidannotations.activities.MainActivity.COMM
 public class DownloadJsonTask extends AsyncTask<URL, Integer, List<String>> {
 
     private MainActivity activity;
+    private String errorCode;
 
     public DownloadJsonTask(MainActivity activity) {
         this.activity = activity;
+        this.errorCode = null;
     }
 
     @Override
     protected List<String> doInBackground(URL... urls) {
-        InputStream file = null;
+        InputStream file;
         JsonReader jsonReader;
 
         activity.tousLesMotsATrouver = new ArrayList<>();
@@ -43,9 +43,9 @@ public class DownloadJsonTask extends AsyncTask<URL, Integer, List<String>> {
         boolean accesServeur = false;
 
         try {
-            accesServeur = Runtime.getRuntime().exec (COMMAND).waitFor() == 0;
+            accesServeur = Runtime.getRuntime().exec (MainActivity.COMMAND).waitFor() == 0;
         } catch(IOException | InterruptedException e) {
-            AffichageToast.afficherToast(this.activity, AffichageToast.ERREUR_CONNEXION);
+            errorCode = AffichageToast.ERREUR_CONNEXION;
             cancel(true);
             if(isCancelled())
                 return null;
@@ -64,14 +64,14 @@ public class DownloadJsonTask extends AsyncTask<URL, Integer, List<String>> {
                         }
                     }
                 } catch(IOException e) {
-                    AffichageToast.afficherToast(this.activity, AffichageToast.ERREUR_LECTURE_JSON);
+                    errorCode = AffichageToast.ERREUR_LECTURE_JSON;
                     cancel(true);
                     if(isCancelled())
                         return null;
                 }
             }
         } else {
-            AffichageToast.afficherToast(this.activity, AffichageToast.ERREUR_CONNEXION);
+            errorCode = AffichageToast.ERREUR_CONNEXION;
             cancel(true);
             if(isCancelled())
                 return null;
@@ -83,10 +83,17 @@ public class DownloadJsonTask extends AsyncTask<URL, Integer, List<String>> {
     @Override
     protected void onPostExecute(List<String> nomsNiveaux) {
 
-        activity.listView = (ListView) activity.findViewById(R.id.noms_niveaux);
-        activity.listView.setAdapter(new ButtonArrayAdapter<String>(activity,
-                R.layout.item_list_level, nomsNiveaux));
+        if(nomsNiveaux != null) {
+            activity.listView = (ListView) activity.findViewById(R.id.noms_niveaux);
+            activity.listView.setAdapter(new ButtonArrayAdapter<String>(activity,
+                    R.layout.item_list_level, nomsNiveaux));
+        }
 
+    }
+
+    @Override
+    protected void onCancelled() {
+        AffichageToast.afficherToast(activity, errorCode);
     }
 
 }

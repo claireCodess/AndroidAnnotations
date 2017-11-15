@@ -4,8 +4,8 @@
 
     <uses-permission android:name="android.permission.INTERNET"/>
 
-    <application
-        android:name=".application.UILApplication_"
+    <!-- Etape 2 : remplacer "UILApplication" par "UILApplication_" -->
+    <application android:name=".application.UILApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
