@@ -1,6 +1,8 @@
 apply plugin: 'com.android.application'
-apply plugin: 'android-apt'
-def AAVersion = '4.1.0'
+
+// Etape 1 : à décommenter
+/* apply plugin: 'android-apt'
+def AAVersion = '4.1.0' */
 
 android {
     compileSdkVersion 26
@@ -30,6 +32,8 @@ dependencies {
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
     testCompile 'junit:junit:4.12'
-    apt "org.androidannotations:androidannotations:$AAVersion"
-    compile "org.androidannotations:androidannotations-api:$AAVersion"
+
+    // Etape 1 : à décommenter
+    /* apt "org.androidannotations:androidannotations:$AAVersion"
+    compile "org.androidannotations:androidannotations-api:$AAVersion" */
 }
