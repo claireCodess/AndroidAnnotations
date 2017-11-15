@@ -10,7 +10,9 @@ import android.widget.Button;
 import java.util.List;
 
 import claire.example.com.androidannotations.R;
-import claire.example.com.androidannotations.activities.MainActivity_;
+
+// Etape 2 : remplacer "MainActivity" par "MainActivity_"
+import claire.example.com.androidannotations.activities.MainActivity;
 
 /**
  * Created by Claire on 13/11/2017.
@@ -19,14 +21,20 @@ import claire.example.com.androidannotations.activities.MainActivity_;
 public class ButtonArrayAdapter<T> extends ArrayAdapter<T> {
 
     private LayoutInflater layoutInflater;
-    private MainActivity_ activity;
+
+    // Etape 2 : remplacer "MainActivity" par "MainActivity_"
+    private MainActivity activity;
+
     private int resource;
     private List<T> objects;
 
     public ButtonArrayAdapter(Context context, int resource, List<T> objects) {
         super(context, resource, objects);
         layoutInflater = LayoutInflater.from(context);
-        this.activity = (MainActivity_) context;
+
+        // Etape 2 : remplacer "MainActivity" par "MainActivity_"
+        this.activity = (MainActivity) context;
+
         this.resource = resource;
         this.objects = objects;
     }

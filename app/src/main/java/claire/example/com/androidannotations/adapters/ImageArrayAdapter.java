@@ -18,7 +18,10 @@ import java.util.List;
 import java.util.Set;
 
 import claire.example.com.androidannotations.R;
-import claire.example.com.androidannotations.activities.GameActivity_;
+
+// Etape 2 : remplacer "GameActivity" par "GameActivity_"
+import claire.example.com.androidannotations.activities.GameActivity;
+
 import claire.example.com.androidannotations.toast.AffichageToast;
 
 import static claire.example.com.androidannotations.toast.AffichageToast.afficherToast;
@@ -30,7 +33,10 @@ import static claire.example.com.androidannotations.toast.AffichageToast.affiche
 public class ImageArrayAdapter<T> extends ArrayAdapter<T> {
 
     private LayoutInflater layoutInflater;
-    private GameActivity_ activity;
+
+    // Etape 2 : remplacer "GameActivity" par "GameActivity_"
+    private GameActivity activity;
+
     private int resource;
     private List<T> objects;
     private Set<View> imagesChargees;
@@ -39,7 +45,10 @@ public class ImageArrayAdapter<T> extends ArrayAdapter<T> {
     public ImageArrayAdapter(Context context, int resource, List<T> objects) {
         super(context, resource, objects);
         layoutInflater = LayoutInflater.from(context);
-        this.activity = (GameActivity_) context;
+
+        // Etape 2 : remplacer "GameActivity" par "GameActivity_"
+        this.activity = (GameActivity) context;
+
         this.resource = resource;
         this.objects = objects;
         this.imagesChargees = new HashSet<>();

@@ -33,7 +33,8 @@ import org.androidannotations.annotations.ViewById;
 import org.androidannotations.annotations.res.StringRes;
 import org.androidannotations.api.BackgroundExecutor; */
 
-@EActivity(R.layout.activity_main)
+// Etape 2 : à décommenter
+// @EActivity(R.layout.activity_main)
 public class MainActivity extends AppCompatActivity {
 
     // Constantes

@@ -24,7 +24,8 @@ import org.androidannotations.annotations.ViewById;
 import org.androidannotations.annotations.ViewsById;
 import org.androidannotations.annotations.res.StringRes; */
 
-@EActivity(R.layout.activity_game)
+// Etape 2 : à décommenter
+// @EActivity(R.layout.activity_game)
 public class GameActivity extends AppCompatActivity {
 
     // Constantes
