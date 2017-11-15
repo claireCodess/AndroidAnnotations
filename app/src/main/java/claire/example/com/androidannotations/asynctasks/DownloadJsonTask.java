@@ -4,6 +4,7 @@ import android.os.AsyncTask;
 import android.util.JsonReader;
 import android.widget.GridView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -71,7 +72,7 @@ public class DownloadJsonTask extends AsyncTask<URL, Integer, List<String>> {
     @Override
     protected void onPostExecute(List<String> nomsNiveaux) {
 
-        //ListView listView = (ListView) activity.findViewById(R.id.noms_niveaux);
+        ListView listView = (ListView) activity.findViewById(R.id.noms_niveaux);
         activity.listView.setAdapter(new ButtonArrayAdapter<String>(activity,
                 R.layout.item_list_level, nomsNiveaux));
 

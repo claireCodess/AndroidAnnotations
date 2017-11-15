@@ -46,7 +46,8 @@ public class MainActivity extends AppCompatActivity {
 
     // Injection d'une vue
 
-    @ViewById(R.id.noms_niveaux)
+    // Etape 3 : à décommenter
+    // @ViewById(R.id.noms_niveaux)
     public ListView listView;
 
 
@@ -71,11 +72,9 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onClick(final View v) {
-            System.out.println("Appuyé !");
             String niveau = (String)v.getTag();
             niveau = niveau.replace(getResources().getString(R.string.identifiant_niveau), "");
             int indexNiveau = Integer.parseInt(niveau);
-            System.out.println("indexNiveau = " + indexNiveau);
             demarrerNiveau(indexNiveau);
         }
 
@@ -216,7 +215,6 @@ public class MainActivity extends AppCompatActivity {
     // Démarrer le niveau correspondant à l'index spécifié dans le fichier JSON.
     public void demarrerNiveau(int indexNiveau) {
         ArrayList<String> cheminsFichiersImgNiveauCourant = (ArrayList<String>) cheminsFichiersToutesLesImages.get(indexNiveau);
-        System.out.println("Size cheminsFichiersImgNiveauCourant = " + cheminsFichiersImgNiveauCourant.size());
         if(cheminsFichiersImgNiveauCourant != null) {
             String motATrouver = tousLesMotsATrouver.get(indexNiveau);
 
@@ -228,8 +226,6 @@ public class MainActivity extends AppCompatActivity {
         intent.putExtra(MOT_A_TROUVER, motATrouver);*/
             intent.putStringArrayListExtra(CHEMINS_FICHIERS_IMAGES, cheminsFichiersImgNiveauCourant);
             startActivityForResult(intent, GAME_ACTIVITY_INTENT_CODE);
-        } else {
-            System.err.println("cheminsFichiersImgNiveauCourant null !");
         }
     }
 

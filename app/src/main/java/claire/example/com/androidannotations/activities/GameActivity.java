@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -37,16 +38,20 @@ public class GameActivity extends AppCompatActivity {
 
     // Injections de vues
 
-    @ViewById(R.id.grid_view)
+    // Etape 3 : à décommenter
+    // @ViewById(R.id.grid_view)
     public GridView gridView;
 
-    @ViewById(R.id.reponse_utilisateur)
+    // Etape 3 : à décommenter
+    // @ViewById(R.id.reponse_utilisateur)
     public TextView reponseUtilisateur;
 
-    @ViewById(R.id.valider_reponse)
+    // Etape 3 : à décommenter
+    // @ViewById(R.id.valider_reponse)
     public Button valider;
 
-    @ViewsById({R.id.loading_layout, R.id.game_layout})
+    // Etape 3 : à décommenter
+    // @ViewsById({R.id.loading_layout, R.id.game_layout})
     public List<LinearLayout> linearLayouts;
 
 
@@ -85,20 +90,22 @@ public class GameActivity extends AppCompatActivity {
         motATrouver = intent.getStringExtra(MainActivity_.MOT_A_TROUVER);
         cheminsFichiersImages = intent.getStringArrayListExtra(MainActivity_.CHEMINS_FICHIERS_IMAGES);*/
 
-        //GridView gridView = (GridView) findViewById(R.id.grid_view);
-        //gridView.setAdapter(new ImageArrayAdapter(this, R.layout.item_grid_image, cheminsFichiersImages));
+        // Etape 3 : à commenter
+        gridView = (GridView) findViewById(R.id.grid_view);
+        gridView.setAdapter(new ImageArrayAdapter(this, R.layout.item_grid_image, cheminsFichiersImages));
 
         //Button valider = (Button) findViewById(R.id.valider_reponse);
         /*valider.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (v.getId() == R.id.valider_reponse) {
-                    //TextView reponseUtilisateur = (TextView) findViewById(R.id.reponse_utilisateur);
+                if (v.getId() == R.id.valider_reponse) {*/
 
-                    if (reponseUtilisateur.getText().toString().equals(motATrouver)) {
+                    //reponseUtilisateur = (TextView) findViewById(R.id.reponse_utilisateur);
+
+                    //if (reponseUtilisateur.getText().toString().equals(motATrouver)) {
                         // Ici, il faut penser à l'astuce d'utiliser "GameActivity.this", sinon, le "this"
                         // représente cette instance d'OnClickListener !
-                        Toast.makeText(GameActivity.this, R.string.motTrouve, Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(GameActivity.this, R.string.motTrouve, Toast.LENGTH_SHORT).show();
 
                         // On passe au niveau suivant s'il existe, sinon on retourne à l'écran d'accueil
                         /*Intent intentRetour = new Intent();
@@ -108,8 +115,8 @@ public class GameActivity extends AppCompatActivity {
 
                         setResult(RESULT_OK, intentRetour);
 
-                        finish();
-                    } else {
+                        finish();*/
+                    }/* else {
                         // Même remarque ici
                         Toast.makeText(GameActivity.this, R.string.motNonTrouve, Toast.LENGTH_SHORT).show();
                     }
