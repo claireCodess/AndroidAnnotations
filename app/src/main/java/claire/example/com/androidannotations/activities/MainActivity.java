@@ -21,6 +21,8 @@ import claire.example.com.androidannotations.adapters.ButtonArrayAdapter;
 import claire.example.com.androidannotations.toast.AffichageToast;
 
 import static claire.example.com.androidannotations.activities.GameActivity.CHEMINS_FICHIERS_IMAGES;
+import static claire.example.com.androidannotations.activities.GameActivity.MOT_A_TROUVER;
+import static claire.example.com.androidannotations.activities.GameActivity.NUM_NIVEAU_COURANT;
 import static claire.example.com.androidannotations.toast.AffichageToast.afficherToast;
 
 // Etape 1 : à décommenter
@@ -219,12 +221,14 @@ public class MainActivity extends AppCompatActivity {
         if(cheminsFichiersImgNiveauCourant != null) {
             String motATrouver = tousLesMotsATrouver.get(indexNiveau);
 
-            //Intent intent = new Intent(this, GameActivity_.class);
-            Intent intent = GameActivity_.intent(this)
-                    .numNiveauCourant(indexNiveau)
-                    .motATrouver(motATrouver).get();
-        /*intent.putExtra(NUM_NIVEAU_DEMARRAGE, indexNiveau);
-        intent.putExtra(MOT_A_TROUVER, motATrouver);*/
+            // Etape 5 : remplacer la ligne ci-dessous par la ligne commentée
+            Intent intent = new Intent(this, GameActivity.class);
+            // Intent intent = GameActivity_.intent(this).numNiveauCourant(indexNiveau).motATrouver(motATrouver).get();
+
+            // Etape 5 : commenter les deux lignes ci-dessous
+            intent.putExtra(NUM_NIVEAU_COURANT, indexNiveau);
+            intent.putExtra(MOT_A_TROUVER, motATrouver);
+
             intent.putStringArrayListExtra(CHEMINS_FICHIERS_IMAGES, cheminsFichiersImgNiveauCourant);
             startActivityForResult(intent, GAME_ACTIVITY_INTENT_CODE);
         }

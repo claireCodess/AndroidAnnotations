@@ -71,10 +71,12 @@ public class GameActivity extends AppCompatActivity {
 
     // Les extras passées en paramètre à l'Intent qui a démarré cette Activity
 
-    @Extra(NUM_NIVEAU_COURANT)
+    // Etape 5 : à décommenter
+    // @Extra(NUM_NIVEAU_COURANT)
     public Integer numNiveauCourant;
 
-    @Extra(MOT_A_TROUVER)
+    // Etape 5 : à décommenter
+    // @Extra(MOT_A_TROUVER)
     public String motATrouver;
 
     // Nous ne mettons pas l'annotation @Extra ici car List<String> n'est pas un type primitif.
@@ -87,10 +89,11 @@ public class GameActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
 
-        /*Intent intent = getIntent();
-        numNiveauCourant = intent.getIntExtra(MainActivity_.NUM_NIVEAU_DEMARRAGE, 0);
-        motATrouver = intent.getStringExtra(MainActivity_.MOT_A_TROUVER);
-        cheminsFichiersImages = intent.getStringArrayListExtra(MainActivity_.CHEMINS_FICHIERS_IMAGES);*/
+        // Etape 5 : à commenter
+        Intent intent = getIntent();
+        numNiveauCourant = intent.getIntExtra(NUM_NIVEAU_COURANT, 0);
+        motATrouver = intent.getStringExtra(MOT_A_TROUVER);
+        cheminsFichiersImages = intent.getStringArrayListExtra(CHEMINS_FICHIERS_IMAGES);
 
         // Etape 3 : à commenter
         gridView = (GridView) findViewById(R.id.grid_view);
@@ -118,7 +121,7 @@ public class GameActivity extends AppCompatActivity {
                         setResult(RESULT_OK, intentRetour);
 
                         finish();*/
-                    }/* else {
+                    /*} else {
                         // Même remarque ici
                         Toast.makeText(GameActivity.this, R.string.motNonTrouve, Toast.LENGTH_SHORT).show();
                     }
