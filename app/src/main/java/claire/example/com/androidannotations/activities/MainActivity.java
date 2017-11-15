@@ -170,7 +170,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 mettreAJourMenuPrincipal(nomsNiveaux);
             } catch (IOException e) {
-                afficherMessageErreurConnexion();
+                afficherMessageErreurJson();
                 BackgroundExecutor.cancelAll("cancellable_task", true);
             }
         } else {
@@ -189,6 +189,11 @@ public class MainActivity extends AppCompatActivity {
     @UiThread
     public void afficherMessageErreurConnexion() {
         afficherToast(this, AffichageToast.ERREUR_CONNEXION);
+    }
+
+    @UiThread
+    public void afficherMessageErreurJson() {
+        afficherToast(this, AffichageToast.ERREUR_LECTURE_JSON);
     }
 
     // Global OnClickListener for all views
