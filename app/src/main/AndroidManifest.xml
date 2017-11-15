@@ -12,15 +12,20 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="claire.example.com.androidannotations.activities.MainActivity_"
+
+        <!-- Etape 2 : remplacer "MainActivity" par "MainActivity_" -->
+        <activity android:name="claire.example.com.androidannotations.activities.MainActivity"
+
             android:label="@string/titre_rebus">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name="claire.example.com.androidannotations.activities.GameActivity_"
+
+        <!-- Etape 2 : remplacer "GameActivity" par "GameActivity_" -->
+        <activity android:name="claire.example.com.androidannotations.activities.GameActivity"
+
             android:label="@string/titre_rebus" />
     </application>
 
