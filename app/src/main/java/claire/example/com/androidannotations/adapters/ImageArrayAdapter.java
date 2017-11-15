@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 
-import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.listener.SimpleImageLoadingListener;
@@ -50,11 +49,8 @@ public class ImageArrayAdapter<T> extends ArrayAdapter<T> {
     public View getView(final int position, final View convertView, final ViewGroup parent) {
         View view = convertView;
         ImageView imageView;
-        String imageUri = activity.urlRoot/*getResources().getString(R.string.url_root)*/ + objects.get(position);
-        DisplayImageOptions options;
+        String imageUri = activity.urlRoot + objects.get(position);
         ImageLoader imageLoader;
-        //final LinearLayout loadingLayout = (LinearLayout) activity.findViewById(R.id.loading_layout);
-        //final LinearLayout gameLayout = (LinearLayout) activity.findViewById(R.id.game_layout);
 
         if (convertView == null) {
             view = layoutInflater.inflate(resource, parent, false);

@@ -45,7 +45,7 @@ public class ButtonArrayAdapter<T> extends ArrayAdapter<T> {
         }
 
         button.setText((String)objects.get(position));
-        button.setTag(activity.idNiveau/*getResources().getString(R.string.identifiant_niveau)*/ + position);
+        button.setTag(activity.idNiveau + position);
         button.setOnClickListener(activity.onClickListener);
 
         return view;

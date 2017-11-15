@@ -62,16 +62,15 @@ public class MainActivity extends AppCompatActivity {
     public int nombreDeNiveaux;
 
 
-    // OnClickListener générale pour toutes les vues
+    // OnClickListener générale pour toutes les vues (on ne peut pas utiliser l'annotation @Click ici !)
+
     public final View.OnClickListener onClickListener = new View.OnClickListener() {
 
         @Override
         public void onClick(final View v) {
-            System.out.println("Appuyé !");
             String niveau = (String)v.getTag();
             niveau = niveau.replace(getResources().getString(R.string.identifiant_niveau), "");
             int indexNiveau = Integer.parseInt(niveau);
-            System.out.println("indexNiveau = " + indexNiveau);
             demarrerNiveau(indexNiveau);
         }
 
@@ -86,7 +85,6 @@ public class MainActivity extends AppCompatActivity {
         try {
             String urlFichierJsonStr = getResources().getString(R.string.url_root) + "rebus.json";
             URL urlFichierJson = new URL(urlFichierJsonStr);
-            //new DownloadJsonTask((MainActivity_)this).execute(urlFichierJson);
             telechargerFichierJson(urlFichierJson);
         } catch (MalformedURLException e) {
             e.printStackTrace();
@@ -150,20 +148,6 @@ public class MainActivity extends AppCompatActivity {
         afficherToast(this, AffichageToast.ERREUR_LECTURE_JSON);
     }
 
-    /*@Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode == GAME_ACTIVITY_INTENT_CODE) {
-            if(resultCode == RESULT_OK) {
-                int indexNiveauSuivant = data.getIntExtra(NUM_NIVEAU_SUIVANT, 0);
-                if(indexNiveauSuivant < nombreDeNiveaux) {
-                    demarrerNiveau(indexNiveauSuivant);
-                }
-            }
-            // Si resultCode == RESULT_CANCELED, alors l'utilisateur a appuyé
-            // sur la flèche de retour, donc on ne fait rien.
-        }
-    }*/
-
     @OnActivityResult(GAME_ACTIVITY_INTENT_CODE)
     public void onResult(int resultCode, @OnActivityResult.Extra(value = NUM_NIVEAU_SUIVANT) int indexNiveauSuivant) {
         if(resultCode == RESULT_OK) {
@@ -212,20 +196,14 @@ public class MainActivity extends AppCompatActivity {
     // Démarrer le niveau correspondant à l'index spécifié dans le fichier JSON.
     public void demarrerNiveau(int indexNiveau) {
         ArrayList<String> cheminsFichiersImgNiveauCourant = (ArrayList<String>) cheminsFichiersToutesLesImages.get(indexNiveau);
-        System.out.println("Size cheminsFichiersImgNiveauCourant = " + cheminsFichiersImgNiveauCourant.size());
         if(cheminsFichiersImgNiveauCourant != null) {
             String motATrouver = tousLesMotsATrouver.get(indexNiveau);
 
-            //Intent intent = new Intent(this, GameActivity_.class);
             Intent intent = GameActivity_.intent(this)
                     .numNiveauCourant(indexNiveau)
                     .motATrouver(motATrouver).get();
-        /*intent.putExtra(NUM_NIVEAU_DEMARRAGE, indexNiveau);
-        intent.putExtra(MOT_A_TROUVER, motATrouver);*/
             intent.putStringArrayListExtra(CHEMINS_FICHIERS_IMAGES, cheminsFichiersImgNiveauCourant);
             startActivityForResult(intent, GAME_ACTIVITY_INTENT_CODE);
-        } else {
-            System.err.println("cheminsFichiersImgNiveauCourant null !");
         }
     }
 
