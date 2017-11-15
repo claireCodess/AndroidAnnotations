@@ -58,7 +58,7 @@ public class DownloadJsonTask extends AsyncTask<URL, Integer, List<String>> {
                 activity.lireFichierJson(jsonReader);
 
                 for(int numNiveau = 1; numNiveau <= activity.nombreDeNiveaux; numNiveau++) {
-                    nomsNiveaux.add(activity.constanteNiveau/*getResources().getString(R.string.niveau)*/ + " " + numNiveau);
+                    nomsNiveaux.add(activity.getResources().getString(R.string.niveau) + " " + numNiveau);
                 }
 
             } catch(IOException e) {

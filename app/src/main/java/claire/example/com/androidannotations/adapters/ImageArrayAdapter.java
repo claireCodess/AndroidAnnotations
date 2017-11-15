@@ -58,7 +58,11 @@ public class ImageArrayAdapter<T> extends ArrayAdapter<T> {
     public View getView(final int position, final View convertView, final ViewGroup parent) {
         View view = convertView;
         ImageView imageView;
-        String imageUri = activity.urlRoot/*getResources().getString(R.string.url_root)*/ + objects.get(position);
+
+        // Etape 4 : remplacer la ligne ci-dessous par la ligne commentée
+        String imageUri = activity.getResources().getString(R.string.url_root) + objects.get(position);
+        // String imageUri = activity.urlRoot + objects.get(position);
+
         ImageLoader imageLoader;
 
         // Etape 3 : à commenter

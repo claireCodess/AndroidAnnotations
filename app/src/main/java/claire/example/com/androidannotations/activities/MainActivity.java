@@ -2,7 +2,6 @@ package claire.example.com.androidannotations.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.StringRes;
 import android.support.annotation.UiThread;
 import android.support.v7.app.AppCompatActivity;
 import android.util.JsonReader;
@@ -53,10 +52,12 @@ public class MainActivity extends AppCompatActivity {
 
     // Ressources (String ici)
 
-    @StringRes(R.string.identifiant_niveau)
+    // Etape 4 : à décommenter
+    // @StringRes(R.string.identifiant_niveau)
     public String idNiveau;
 
-    @StringRes(R.string.niveau)
+    // Etape 4 : à décommenter
+    // @StringRes(R.string.niveau)
     public String constanteNiveau;
 
 

@@ -2,7 +2,6 @@ package claire.example.com.androidannotations.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.StringRes;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Button;
 import android.widget.GridView;
@@ -57,13 +56,16 @@ public class GameActivity extends AppCompatActivity {
 
     // Ressources (String ici)
 
-    @StringRes
+    // Etape 4 : à décommenter
+    // @StringRes
     public String motTrouve;
 
-    @StringRes
+    // Etape 4 : à décommenter
+    // @StringRes
     public String motNonTrouve;
 
-    @StringRes(R.string.url_root)
+    // Etape 4 : à décommenter
+    // @StringRes(R.string.url_root)
     public String urlRoot;
 
 
