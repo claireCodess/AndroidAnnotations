@@ -20,11 +20,6 @@ import claire.example.com.androidannotations.R;
 import claire.example.com.androidannotations.adapters.ButtonArrayAdapter;
 import claire.example.com.androidannotations.toast.AffichageToast;
 
-import static claire.example.com.androidannotations.activities.GameActivity.CHEMINS_FICHIERS_IMAGES;
-import static claire.example.com.androidannotations.activities.GameActivity.MOT_A_TROUVER;
-import static claire.example.com.androidannotations.activities.GameActivity.NUM_NIVEAU_COURANT;
-import static claire.example.com.androidannotations.toast.AffichageToast.afficherToast;
-
 // Etape 1 : à décommenter
 /* import org.androidannotations.annotations.Background;
 import org.androidannotations.annotations.EActivity;
@@ -70,7 +65,8 @@ public class MainActivity extends AppCompatActivity {
     public int nombreDeNiveaux;
 
 
-    // OnClickListener générale pour toutes les vues
+    // OnClickListener générale pour toutes les vues : à ne pas supprimer
+    // dans la version avec les annotations !
     public final View.OnClickListener onClickListener = new View.OnClickListener() {
 
         @Override
@@ -148,12 +144,12 @@ public class MainActivity extends AppCompatActivity {
 
     @UiThread
     public void afficherMessageErreurConnexion() {
-        afficherToast(this, AffichageToast.ERREUR_CONNEXION);
+        AffichageToast.afficherToast(this, AffichageToast.ERREUR_CONNEXION);
     }
 
     @UiThread
     public void afficherMessageErreurJson() {
-        afficherToast(this, AffichageToast.ERREUR_LECTURE_JSON);
+        AffichageToast.afficherToast(this, AffichageToast.ERREUR_LECTURE_JSON);
     }
 
     /*@Override
@@ -226,10 +222,10 @@ public class MainActivity extends AppCompatActivity {
             // Intent intent = GameActivity_.intent(this).numNiveauCourant(indexNiveau).motATrouver(motATrouver).get();
 
             // Etape 5 : commenter les deux lignes ci-dessous
-            intent.putExtra(NUM_NIVEAU_COURANT, indexNiveau);
-            intent.putExtra(MOT_A_TROUVER, motATrouver);
+            intent.putExtra(GameActivity.NUM_NIVEAU_COURANT, indexNiveau);
+            intent.putExtra(GameActivity.MOT_A_TROUVER, motATrouver);
 
-            intent.putStringArrayListExtra(CHEMINS_FICHIERS_IMAGES, cheminsFichiersImgNiveauCourant);
+            intent.putStringArrayListExtra(GameActivity.CHEMINS_FICHIERS_IMAGES, cheminsFichiersImgNiveauCourant);
             startActivityForResult(intent, GAME_ACTIVITY_INTENT_CODE);
         }
     }

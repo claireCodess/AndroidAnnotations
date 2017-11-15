@@ -3,11 +3,11 @@ package claire.example.com.androidannotations.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.List;
 
@@ -99,46 +99,45 @@ public class GameActivity extends AppCompatActivity {
         gridView = (GridView) findViewById(R.id.grid_view);
         gridView.setAdapter(new ImageArrayAdapter(this, R.layout.item_grid_image, cheminsFichiersImages));
 
-        //Button valider = (Button) findViewById(R.id.valider_reponse);
-        /*valider.setOnClickListener(new View.OnClickListener() {
+        // Etape 6 : tout ce qui est ci-dessous est à commenter jusqu'à la fin de la méthode onCreate
+        Button valider = (Button) findViewById(R.id.valider_reponse);
+        valider.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (v.getId() == R.id.valider_reponse) {*/
+                if (v.getId() == R.id.valider_reponse) {
 
-                    //reponseUtilisateur = (TextView) findViewById(R.id.reponse_utilisateur);
+                    reponseUtilisateur = (TextView) findViewById(R.id.reponse_utilisateur);
 
-                    //if (reponseUtilisateur.getText().toString().equals(motATrouver)) {
+                    if (reponseUtilisateur.getText().toString().equals(motATrouver)) {
                         // Ici, il faut penser à l'astuce d'utiliser "GameActivity.this", sinon, le "this"
                         // représente cette instance d'OnClickListener !
-                        //Toast.makeText(GameActivity.this, R.string.motTrouve, Toast.LENGTH_SHORT).show();
+                        AffichageToast.afficherToast(GameActivity.this, GameActivity.this.getResources().getString(R.string.motTrouve));
 
                         // On passe au niveau suivant s'il existe, sinon on retourne à l'écran d'accueil
-                        /*Intent intentRetour = new Intent();
+                        Intent intentRetour = new Intent();
                         intentRetour.putExtra(MainActivity.NUM_NIVEAU_SUIVANT, ++numNiveauCourant);
-                        Intent intentRetour = GameActivity_.intent(this)
-                                .indexNiveauSuivant(++numNiveauCourant);
-
                         setResult(RESULT_OK, intentRetour);
-
-                        finish();*/
-                    /*} else {
+                        finish();
+                    } else {
                         // Même remarque ici
-                        Toast.makeText(GameActivity.this, R.string.motNonTrouve, Toast.LENGTH_SHORT).show();
+                        AffichageToast.afficherToast(GameActivity.this, GameActivity.this.getResources().getString(R.string.motNonTrouve));
                     }
                 }
             }
-        });*/
+        });
 
     }
 
-    @AfterViews
+    // Etape 3 : méthode à décommenter
+    /* @AfterViews
     public void chargerImages() {
         Intent intent = getIntent();
         cheminsFichiersImages = intent.getStringArrayListExtra(CHEMINS_FICHIERS_IMAGES);
         gridView.setAdapter(new ImageArrayAdapter(this, R.layout.item_grid_image, cheminsFichiersImages));
-    }
+    } */
 
-    @Click(R.id.valider_reponse)
+    // Etape 6 : méthode à décommenter
+    /* @Click(R.id.valider_reponse)
     public void validerClicked() {
         if (reponseUtilisateur.getText().toString().equals(motATrouver)) {
             AffichageToast.afficherToast(this, motTrouve);
@@ -151,5 +150,5 @@ public class GameActivity extends AppCompatActivity {
         } else {
             AffichageToast.afficherToast(this, motNonTrouve);
         }
-    }
+    } */
 }
