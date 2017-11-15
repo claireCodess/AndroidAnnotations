@@ -2,18 +2,12 @@ package claire.example.com.androidannotations.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.StringRes;
+import android.support.annotation.UiThread;
 import android.support.v7.app.AppCompatActivity;
 import android.util.JsonReader;
 import android.view.View;
 import android.widget.ListView;
-
-import org.androidannotations.annotations.Background;
-import org.androidannotations.annotations.EActivity;
-import org.androidannotations.annotations.OnActivityResult;
-import org.androidannotations.annotations.UiThread;
-import org.androidannotations.annotations.ViewById;
-import org.androidannotations.annotations.res.StringRes;
-import org.androidannotations.api.BackgroundExecutor;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -29,6 +23,15 @@ import claire.example.com.androidannotations.toast.AffichageToast;
 
 import static claire.example.com.androidannotations.activities.GameActivity.CHEMINS_FICHIERS_IMAGES;
 import static claire.example.com.androidannotations.toast.AffichageToast.afficherToast;
+
+// Etape 1 : à décommenter
+/* import org.androidannotations.annotations.Background;
+import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.OnActivityResult;
+import org.androidannotations.annotations.UiThread;
+import org.androidannotations.annotations.ViewById;
+import org.androidannotations.annotations.res.StringRes;
+import org.androidannotations.api.BackgroundExecutor; */
 
 @EActivity(R.layout.activity_main)
 public class MainActivity extends AppCompatActivity {

@@ -2,25 +2,27 @@ package claire.example.com.androidannotations.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.StringRes;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import org.androidannotations.annotations.AfterViews;
-import org.androidannotations.annotations.Click;
-import org.androidannotations.annotations.EActivity;
-import org.androidannotations.annotations.Extra;
-import org.androidannotations.annotations.ViewById;
-import org.androidannotations.annotations.ViewsById;
-import org.androidannotations.annotations.res.StringRes;
-
 import java.util.List;
 
 import claire.example.com.androidannotations.R;
 import claire.example.com.androidannotations.adapters.ImageArrayAdapter;
 import claire.example.com.androidannotations.toast.AffichageToast;
+
+// Etape 1 : à décommenter
+/* import org.androidannotations.annotations.AfterViews;
+import org.androidannotations.annotations.Click;
+import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.Extra;
+import org.androidannotations.annotations.ViewById;
+import org.androidannotations.annotations.ViewsById;
+import org.androidannotations.annotations.res.StringRes; */
 
 @EActivity(R.layout.activity_game)
 public class GameActivity extends AppCompatActivity {
