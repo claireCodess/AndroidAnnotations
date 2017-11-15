@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import claire.example.com.androidannotations.R;
-import claire.example.com.androidannotations.activities.MainActivity_;
+import claire.example.com.androidannotations.activities.MainActivity;
 import claire.example.com.androidannotations.adapters.ButtonArrayAdapter;
 
 /**
@@ -22,9 +22,9 @@ import claire.example.com.androidannotations.adapters.ButtonArrayAdapter;
 
 public class DownloadJsonTask extends AsyncTask<URL, Integer, List<String>> {
 
-    private MainActivity_ activity;
+    private MainActivity activity;
 
-    public DownloadJsonTask(MainActivity_ activity) {
+    public DownloadJsonTask(MainActivity activity) {
         this.activity = activity;
     }
 
@@ -33,9 +33,9 @@ public class DownloadJsonTask extends AsyncTask<URL, Integer, List<String>> {
         InputStream file = null;
         JsonReader jsonReader;
 
-        activity.setTousLesMotsATrouver(new ArrayList<String>());
-        activity.setCheminsFichiersToutesLesImages(new ArrayList<List<String>>());
-        int nbNiveaux = 0;
+        activity.tousLesMotsATrouver = new ArrayList<>();
+        activity.cheminsFichiersToutesLesImages = new ArrayList<>();
+        activity.nombreDeNiveaux = 0;
         List<String> nomsNiveaux = new ArrayList<>();
 
         LinearLayout gameLayout, loadingLayout;
@@ -54,39 +54,9 @@ public class DownloadJsonTask extends AsyncTask<URL, Integer, List<String>> {
         if(file != null) {
             jsonReader = new JsonReader(new InputStreamReader(file));
             try {
-                jsonReader.beginObject();
-                while(jsonReader.hasNext()) {
-                    String propertyName = jsonReader.nextName();
-                    if (propertyName.equals("rebus")) {
-                        jsonReader.beginArray();
-                        while(jsonReader.hasNext()) {
-                            jsonReader.beginObject();
-                            while (jsonReader.hasNext()) {
-                                String rebusPropertyName = jsonReader.nextName();
-                                if (rebusPropertyName.equals("mot")) {
-                                    String mot = jsonReader.nextString();
-                                    activity.getTousLesMotsATrouver().add(mot);
-                                } else if (rebusPropertyName.equals("images")) {
-                                    List<String> cheminsFichiersImgMotCourant = new ArrayList<>();
-                                    jsonReader.beginArray();
-                                    while (jsonReader.hasNext()) {
-                                        String cheminImg = jsonReader.nextString();
-                                        cheminsFichiersImgMotCourant.add(cheminImg);
-                                    }
-                                    activity.getCheminsFichiersToutesLesImages().add(cheminsFichiersImgMotCourant);
-                                    jsonReader.endArray();
-                                }
-                            }
-                            jsonReader.endObject();
-                            nbNiveaux++;
-                        }
-                        jsonReader.endArray();
-                    }
-                }
-                jsonReader.endObject();
+                activity.lireFichierJson(jsonReader);
 
-                activity.setNombreDeNiveaux(nbNiveaux);
-                for(int numNiveau = 1; numNiveau <= nbNiveaux; numNiveau++) {
+                for(int numNiveau = 1; numNiveau <= activity.nombreDeNiveaux; numNiveau++) {
                     nomsNiveaux.add(activity.constanteNiveau/*getResources().getString(R.string.niveau)*/ + " " + numNiveau);
                 }
 

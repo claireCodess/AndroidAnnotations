@@ -35,8 +35,9 @@ public class MainActivity extends AppCompatActivity {
 
     // Constantes
 
-    private static final int GAME_ACTIVITY_INTENT_CODE = 1;
+    public static final int GAME_ACTIVITY_INTENT_CODE = 1;
     public static final String NUM_NIVEAU_SUIVANT = "claire.example.com.androidannotations.niveau";
+    public static final String COMMAND = "ping -c 1 claire.tsc-hunter.com";
 
 
     // Injection d'une vue
@@ -54,44 +55,28 @@ public class MainActivity extends AppCompatActivity {
     public String constanteNiveau;
 
 
-    // L'extra passée en paramètre à l'Intent de "réponse" à l'Intent qui a démarré l'activité GameActivity
+    // Attributs de classe publiques
 
-    /*@Extra(NUM_NIVEAU_SUIVANT)
-    public int */
-
-
-    private List<List<String>> cheminsFichiersToutesLesImages;
-    private List<String> tousLesMotsATrouver;
-    private int nombreDeNiveaux;
+    public List<List<String>> cheminsFichiersToutesLesImages;
+    public List<String> tousLesMotsATrouver;
+    public int nombreDeNiveaux;
 
 
-    public List<List<String>> getCheminsFichiersToutesLesImages() {
-        return cheminsFichiersToutesLesImages;
-    }
+    // OnClickListener générale pour toutes les vues
+    public final View.OnClickListener onClickListener = new View.OnClickListener() {
 
-    public void setCheminsFichiersToutesLesImages(List<List<String>> cheminsFichiersToutesLesImages) {
-        this.cheminsFichiersToutesLesImages = cheminsFichiersToutesLesImages;
-    }
+        @Override
+        public void onClick(final View v) {
+            System.out.println("Appuyé !");
+            String niveau = (String)v.getTag();
+            niveau = niveau.replace(getResources().getString(R.string.identifiant_niveau), "");
+            int indexNiveau = Integer.parseInt(niveau);
+            System.out.println("indexNiveau = " + indexNiveau);
+            demarrerNiveau(indexNiveau);
+        }
 
-    public List<String> getTousLesMotsATrouver() {
-        return tousLesMotsATrouver;
-    }
+    };
 
-    public void setTousLesMotsATrouver(List<String> tousLesMotsATrouver) {
-        this.tousLesMotsATrouver = tousLesMotsATrouver;
-    }
-
-    public int getNombreDeNiveaux() {
-        return nombreDeNiveaux;
-    }
-
-    public void setNombreDeNiveaux(int nombreDeNiveaux) {
-        this.nombreDeNiveaux = nombreDeNiveaux;
-    }
-
-    public View.OnClickListener getOnClickListener() {
-        return onClickListener;
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,8 +106,7 @@ public class MainActivity extends AppCompatActivity {
         boolean accesServeur = false;
 
         try {
-            String command = "ping -c 1 claire.tsc-hunter.com";
-            accesServeur = Runtime.getRuntime().exec (command).waitFor() == 0;
+            accesServeur = Runtime.getRuntime().exec (COMMAND).waitFor() == 0;
         } catch(IOException | InterruptedException e) {
             afficherMessageErreurConnexion();
             BackgroundExecutor.cancelAll("cancellable_task", true);
@@ -133,37 +117,7 @@ public class MainActivity extends AppCompatActivity {
                 file = urlFichierJson.openStream();
                 if (file != null) {
                     jsonReader = new JsonReader(new InputStreamReader(file));
-                    jsonReader.beginObject();
-                    while (jsonReader.hasNext()) {
-                        String propertyName = jsonReader.nextName();
-                        if (propertyName.equals("rebus")) {
-                            jsonReader.beginArray();
-                            while (jsonReader.hasNext()) {
-                                jsonReader.beginObject();
-                                while (jsonReader.hasNext()) {
-                                    String rebusPropertyName = jsonReader.nextName();
-                                    if (rebusPropertyName.equals("mot")) {
-                                        String mot = jsonReader.nextString();
-                                        tousLesMotsATrouver.add(mot);
-                                    } else if (rebusPropertyName.equals("images")) {
-                                        List<String> cheminsFichiersImgMotCourant = new ArrayList<>();
-                                        jsonReader.beginArray();
-                                        while (jsonReader.hasNext()) {
-                                            String cheminImg = jsonReader.nextString();
-                                            cheminsFichiersImgMotCourant.add(cheminImg);
-                                        }
-                                        cheminsFichiersToutesLesImages.add(cheminsFichiersImgMotCourant);
-                                        jsonReader.endArray();
-                                    }
-                                }
-                                jsonReader.endObject();
-                                nombreDeNiveaux++;
-                            }
-                            jsonReader.endArray();
-                        }
-                    }
-                    jsonReader.endObject();
-
+                    lireFichierJson(jsonReader);
                     for (int numNiveau = 1; numNiveau <= nombreDeNiveaux; numNiveau++) {
                         nomsNiveaux.add(constanteNiveau + " " + numNiveau);
                     }
@@ -196,30 +150,6 @@ public class MainActivity extends AppCompatActivity {
         afficherToast(this, AffichageToast.ERREUR_LECTURE_JSON);
     }
 
-    // Global OnClickListener for all views
-    final private View.OnClickListener onClickListener = new View.OnClickListener() {
-
-        @Override
-        public void onClick(final View v) {
-            System.out.println("Appuyé !");
-            String niveau = (String)v.getTag();
-            niveau = niveau.replace(getResources().getString(R.string.identifiant_niveau), "");
-            int indexNiveau = Integer.parseInt(niveau);
-            System.out.println("indexNiveau = " + indexNiveau);
-            demarrerNiveau(indexNiveau);
-        }
-
-    };
-
-    /*@Click(R.id.bouton_niveau)
-    public void levelButtonClicked(Button clickedButton) {
-        System.out.println("Appuyé !");
-        String niveau = (String)clickedButton.getTag();
-        niveau = niveau.replace(idNiveau, "");
-        int indexNiveau = Integer.parseInt(niveau);
-        demarrerNiveau(indexNiveau);
-    }*/
-
     /*@Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode == GAME_ACTIVITY_INTENT_CODE) {
@@ -237,7 +167,6 @@ public class MainActivity extends AppCompatActivity {
     @OnActivityResult(GAME_ACTIVITY_INTENT_CODE)
     public void onResult(int resultCode, @OnActivityResult.Extra(value = NUM_NIVEAU_SUIVANT) int indexNiveauSuivant) {
         if(resultCode == RESULT_OK) {
-            //int indexNiveauSuivant = data.getIntExtra(NUM_NIVEAU_SUIVANT, 0);
             if(indexNiveauSuivant < nombreDeNiveaux) {
                 demarrerNiveau(indexNiveauSuivant);
             }
@@ -246,10 +175,41 @@ public class MainActivity extends AppCompatActivity {
         // sur la flèche de retour, donc on ne fait rien.
     }
 
-    /**
-     * Démarrer le niveau à l'index correspondant dans le fichier JSON.
-     * @param indexNiveau L'index du niveau à démarrer.
-     */
+    // Lire le fichier JSON pour définir les valeurs des attributs de classe.
+    public void lireFichierJson(JsonReader jsonReader) throws IOException {
+        jsonReader.beginObject();
+        while (jsonReader.hasNext()) {
+            String propertyName = jsonReader.nextName();
+            if (propertyName.equals("rebus")) {
+                jsonReader.beginArray();
+                while (jsonReader.hasNext()) {
+                    jsonReader.beginObject();
+                    while (jsonReader.hasNext()) {
+                        String rebusPropertyName = jsonReader.nextName();
+                        if (rebusPropertyName.equals("mot")) {
+                            String mot = jsonReader.nextString();
+                            tousLesMotsATrouver.add(mot);
+                        } else if (rebusPropertyName.equals("images")) {
+                            List<String> cheminsFichiersImgMotCourant = new ArrayList<>();
+                            jsonReader.beginArray();
+                            while (jsonReader.hasNext()) {
+                                String cheminImg = jsonReader.nextString();
+                                cheminsFichiersImgMotCourant.add(cheminImg);
+                            }
+                            cheminsFichiersToutesLesImages.add(cheminsFichiersImgMotCourant);
+                            jsonReader.endArray();
+                        }
+                    }
+                    jsonReader.endObject();
+                    nombreDeNiveaux++;
+                }
+                jsonReader.endArray();
+            }
+        }
+        jsonReader.endObject();
+    }
+
+    // Démarrer le niveau correspondant à l'index spécifié dans le fichier JSON.
     public void demarrerNiveau(int indexNiveau) {
         ArrayList<String> cheminsFichiersImgNiveauCourant = (ArrayList<String>) cheminsFichiersToutesLesImages.get(indexNiveau);
         System.out.println("Size cheminsFichiersImgNiveauCourant = " + cheminsFichiersImgNiveauCourant.size());

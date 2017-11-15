@@ -67,27 +67,9 @@ public class GameActivity extends AppCompatActivity {
     @Extra(MOT_A_TROUVER)
     public String motATrouver;
 
-    //@Extra(CHEMINS_FICHIERS_IMAGES)
+    // Nous ne mettons pas l'annotation @Extra ici car List<String> n'est pas un type primitif.
+    // Nous serons obligés de le récupérer par l'Intent par la méthode classique.
     public List<String> cheminsFichiersImages;
-
-
-    // Les getters/setters
-
-    public String getMotATrouver() {
-        return motATrouver;
-    }
-
-    public void setMotATrouver(String motATrouver) {
-        this.motATrouver = motATrouver;
-    }
-
-    public List<String> getCheminsFichiersImages() {
-        return cheminsFichiersImages;
-    }
-
-    public void setCheminsFichiersImages(List<String> cheminsFichiersImages) {
-        this.cheminsFichiersImages = cheminsFichiersImages;
-    }
 
 
     @Override
@@ -95,14 +77,12 @@ public class GameActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
 
-        //GridView gridView;
-
         /*Intent intent = getIntent();
         numNiveauCourant = intent.getIntExtra(MainActivity_.NUM_NIVEAU_DEMARRAGE, 0);
         motATrouver = intent.getStringExtra(MainActivity_.MOT_A_TROUVER);
         cheminsFichiersImages = intent.getStringArrayListExtra(MainActivity_.CHEMINS_FICHIERS_IMAGES);*/
 
-        //gridView = (GridView) findViewById(R.id.grid_view);
+        //GridView gridView = (GridView) findViewById(R.id.grid_view);
         //gridView.setAdapter(new ImageArrayAdapter(this, R.layout.item_grid_image, cheminsFichiersImages));
 
         //Button valider = (Button) findViewById(R.id.valider_reponse);

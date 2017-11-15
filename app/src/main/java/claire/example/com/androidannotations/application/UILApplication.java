@@ -20,7 +20,7 @@ public class UILApplication extends Application {
     }
 
     public static void initImageLoader(Context context) {
-        // Initialize ImageLoader with configuration.
+        // Initialiser ImageLoader avec la configuration par défaut.
         ImageLoader.getInstance().init(ImageLoaderConfiguration.createDefault(context));
     }
 
