@@ -152,7 +152,8 @@ public class MainActivity extends AppCompatActivity {
         AffichageToast.afficherToast(this, AffichageToast.ERREUR_LECTURE_JSON);
     }
 
-    /*@Override
+    // Etape 5 : méthode à commenter
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode == GAME_ACTIVITY_INTENT_CODE) {
             if(resultCode == RESULT_OK) {
@@ -164,9 +165,10 @@ public class MainActivity extends AppCompatActivity {
             // Si resultCode == RESULT_CANCELED, alors l'utilisateur a appuyé
             // sur la flèche de retour, donc on ne fait rien.
         }
-    }*/
+    }
 
-    @OnActivityResult(GAME_ACTIVITY_INTENT_CODE)
+    // Etape 5 : méthode à décommenter
+    /* @OnActivityResult(GAME_ACTIVITY_INTENT_CODE)
     public void onResult(int resultCode, @OnActivityResult.Extra(value = NUM_NIVEAU_SUIVANT) int indexNiveauSuivant) {
         if(resultCode == RESULT_OK) {
             if(indexNiveauSuivant < nombreDeNiveaux) {
@@ -175,7 +177,7 @@ public class MainActivity extends AppCompatActivity {
         }
         // Si resultCode == RESULT_CANCELED, alors l'utilisateur a appuyé
         // sur la flèche de retour, donc on ne fait rien.
-    }
+    } */
 
     // Lire le fichier JSON pour définir les valeurs des attributs de classe.
     public void lireFichierJson(JsonReader jsonReader) throws IOException {
